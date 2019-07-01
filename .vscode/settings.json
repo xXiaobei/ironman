@@ -1,0 +1,18 @@
+{
+    "python.pythonPath": "/home/bbei/Documents/pythonVenv/ironman/bin/python3",
+    "python.formatting.provider": "autopep8",
+    "python.formatting.autopep8Path": "/home/bbei/Documents/pythonVenv/ironman/bin/autopep8",
+    "editor.fontFamily": "'WenQuanYi Micro Hei Mono','Droid Sans Mono', 'monospace', monospace, 'Droid Sans Fallback'",
+    "editor.fontSize": 16,
+    "python.linting.pylintArgs": ["--disable=invalid-name", "--disable=too-many-function-args"],
+    "python.formatting.autopep8Args": [],
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "__pycache__": true,
+        "**/__pycache__": true
+    }
+}
