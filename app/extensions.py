@@ -12,7 +12,8 @@ bundle = {
     "lib_css": Bundle(
         'css/lib/bootstrap.min.css',
         'css/lib/material-dashboard.min.css',
-        'css/lib/jquery-confirm.min.css'
+        'css/lib/jquery-confirm.min.css',
+        'css/main.css'
     ),
     'lib_js': Bundle(
         'js/lib/jquery-3.3.1.min.js',

@@ -9,16 +9,17 @@
     {% assets "lib_css" %}
     <link type="text/css" rel="stylesheet" href="{{ ASSET_URL }}" />
     {% endassets %}
-    <link href="https://cdn.bootcss.com/font-awesome/5.10.0-11/css/all.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 
 <body class="">
     <div class="wrapper ">
         {% include 'common/sidebar.html' %}
-        {% block content %}
-
-        {% endblock %}
+        <div class="main-panel">
+            {% include 'common/header.html' %}
+            {% block content %}
+            {% endblock %}
+        </div>
     </div>
 
     <footer>
