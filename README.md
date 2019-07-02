@@ -8,4 +8,4 @@
 2：Jquery confirm  
 3：Bootstrap4
 4：popper.js 一款轻量级的 tooltips  
-5：font-awesome 字体图标
+5：font-awesome google 字体图标

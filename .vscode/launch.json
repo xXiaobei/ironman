@@ -10,9 +10,9 @@
             "request": "launch",
             "stopOnEntry": false,
             "pythonPath": "${config:python.pythonPath}",
-            "program": "${workspaceRoot}/app.py",
+            "program": "${workspaceRoot}/main.py",
             "env": {
-                "FLASK_APP": "${workspaceRoot}/app.py"
+                "FLASK_APP": "${workspaceRoot}/main.py"
             },
             "args": ["run", "--no-debugger", "--no-reload"],
             "debugOptions": ["WaitOnAbnormalExit", "WaitOnNormalExit", "RedirectOutput"]
