@@ -5,6 +5,7 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <title>{{title}}</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
     {% assets "lib_css" %}
     <link type="text/css" rel="stylesheet" href="{{ ASSET_URL }}" />
@@ -61,7 +62,7 @@
     </footer>
 
     {% assets "lib_js" %}
-    <script type="text/javascript" href="{{ ASSET_URL }}"></script>
+    <script type="text/javascript" src="{{ ASSET_URL }}"></script>
     {% endassets %}
 </body>
 

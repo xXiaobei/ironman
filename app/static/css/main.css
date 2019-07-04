@@ -17,3 +17,6 @@
     margin-right: 30px;
     height: 70px;
 }
+.sidebar_log {
+    background: url(../images/log.png) no-repeat 32px;
+}

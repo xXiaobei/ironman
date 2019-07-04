@@ -4,9 +4,11 @@ from flask import Flask
 from flask_mongoengine import MongoEngine
 from flask_assets import Bundle, Environment
 from config import config, MongoConfig
+from app.views import dashboard, domain, resource, role, server, template
 
 # Mongodb
 mdb = MongoEngine()
+
 # 静态文件管理
 bundle = {
     "lib_css": Bundle(
@@ -20,7 +22,9 @@ bundle = {
         'js/lib/popper.min.js',
         'js/lib/bootstrap.min.js',
         'js/lib/material-dashboard.min.js',
-        'js/lib/jquery-confirm.min.js'
+        'js/lib/bootstrap-material-design.min.js',
+        'js/lib/jquery-confirm.min.js',
+        'js/main.js'
     )
 }
 
@@ -33,6 +37,14 @@ def init_exts(app):
     # Flask-assets 静态文件管理
     assets = Environment(app)
     assets.register(bundle)
+    # Flask-blueprint 路由注册,参数url_prefix为蓝图前缀 http://localhost/dash
+    app.register_blueprint(dashboard.bp_dash, url_prefix="/")
+    app.register_blueprint(dashboard.bp_dash, url_prefix="/dash")
+    app.register_blueprint(domain.bp_domain, url_prefix="/domain")
+    app.register_blueprint(resource.bp_resc, url_prefix="/resc")
+    app.register_blueprint(role.bp_role, url_prefix="/role")
+    app.register_blueprint(server.bp_serv, url_prefix="/serv")
+    app.register_blueprint(template.bp_temp, url_prefix="/temp")
 
 
 def init_app():
