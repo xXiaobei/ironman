@@ -1,21 +1,14 @@
 /*自定义样式*/
-.header_tips {
-    padding-top: 15px;
-    margin-top: 8px;
+body {
+    overflow: hidden;
 }
-.header_log i {
-    color: green;
-    font-size: 48px;
+.card-body {
+    overflow-y: auto;
+    height: calc(100vh - 150px);
 }
-.header_log {
-    float: left;
-    padding-top: 15px;
-}
-.container_header {
-    border-bottom: 1px solid #d6d6d6;
-    margin-left: 30px;
-    margin-right: 30px;
-    height: 70px;
+.main-panel > .content {
+    margin-top: 0px;
+    padding: 0px;
 }
 .sidebar_log {
     background: url(../images/log.png) no-repeat 32px;

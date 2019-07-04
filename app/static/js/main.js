@@ -26,7 +26,6 @@ class siderbar {
                 console.log(err);
             }
         });
-
         return false; //阻止默认事件
     }
 }
