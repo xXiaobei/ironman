@@ -3,6 +3,9 @@ __pycache__/
 *.py[cod]
 *$py.class
 .vscode
+launch.json
+settings.json
+*.pyc
 
 # C extensions
 *.so
