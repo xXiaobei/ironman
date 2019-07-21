@@ -1,131 +1,132 @@
-/**
- * *@2018-10-08
- * *@describe vue-cli 3.x配置文件
- */
-const path = require("path");
-const vConsolePlugin = require("vconsole-webpack-plugin"); // 引入 移动端模拟开发者工具 插件 （另：https://github.com/liriliri/eruda）
-const CompressionPlugin = require("compression-webpack-plugin"); //Gzip
-const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin; //Webpack包文件分析器
-const baseUrl = process.env.NODE_ENV === "production" ? "/static/" : "/"; //font scss资源路径 不同环境切换控制
+//Vue.config.js是一个可选的配置文件，如果项目的根目录存在这个文件，那么它就会被 @vue/cli-service 自动加载。
+//你也可以使用package.json中的vue字段，但要注意严格遵守JSON的格式来写。这里使用配置vue.config.js的方式进行处理。
+const webpack = require('webpack')
 
 module.exports = {
-	//基本路径
-	//baseUrl: './',//vue-cli3.3以下版本使用
-	publicPath: "./", //vue-cli3.3+新版本使用
-	//输出文件目录
-	outputDir: "../dist",
-	// eslint-loader 是否在保存的时候检查
-	lintOnSave: true,
-	//放置生成的静态资源 (js、css、img、fonts) 的 (相对于 outputDir 的) 目录。
-	assetsDir: "static",
-	//以多页模式构建应用程序。
-	pages: undefined,
-	//是否使用包含运行时编译器的 Vue 构建版本
+	// 部署应用时的基本 URL
+	/*baseUrl:
+		process.env.NODE_ENV === 'production'
+			? '10.0.0.0:8080'
+            : '10.0.0.1:8080',*/
+	baseUrl: '',
+
+	// build时构建文件的目录 构建时传入 --no-clean 可关闭该行为
+	outputDir: '../dist',
+
+	// build时放置生成的静态资源 (js、css、img、fonts) 的 (相对于 outputDir 的) 目录
+	assetsDir: '',
+
+	// 指定生成的 index.html 的输出路径 (相对于 outputDir)。也可以是一个绝对路径。
+	indexPath: 'index.html',
+
+	// 默认在生成的静态资源文件名中包含hash以控制缓存
+	filenameHashing: true,
+
+	// 构建多页面应用，页面的配置
+	/* 多页面配置关闭
+	pages: {
+		index: {
+			// page 的入口
+			entry: 'src/index/main.js',
+			// 模板来源
+			template: 'public/index.html',
+			// 在 dist/index.html 的输出
+			filename: 'index.html',
+			// 当使用 title 选项时，
+			// template 中的 title 标签需要是 <title><%= htmlWebpackPlugin.options.title %></title>
+			title: 'Index Page',
+			// 在这个页面中包含的块，默认情况下会包含
+			// 提取出来的通用 chunk 和 vendor chunk。
+			chunks: ['chunk-vendors', 'chunk-common', 'index']
+		},
+		// 当使用只有入口的字符串格式时，
+		// 模板会被推导为 `public/subpage.html`
+		// 并且如果找不到的话，就回退到 `public/index.html`。
+		// 输出文件名会被推导为 `subpage.html`。
+		subpage: 'src/subpage/main.js'
+    },
+    */
+
+	// 是否在开发环境下通过 eslint-loader 在每次保存时 lint 代码 (在生产构建时禁用 eslint-loader)
+	lintOnSave: process.env.NODE_ENV !== 'production',
+
+	// 是否使用包含运行时编译器的 Vue 构建版本
 	runtimeCompiler: false,
-	//是否为 Babel 或 TypeScript 使用 thread-loader。该选项在系统的 CPU 有多于一个内核时自动启用，仅作用于生产构建，在适当的时候开启几个子进程去并发的执行压缩
-	parallel: require("os").cpus().length > 1,
-	//生产环境是否生成 sourceMap 文件，一般情况不建议打开
-	productionSourceMap: false,
-	// webpack配置
-	//对内部的 webpack 配置进行更细粒度的修改 https://github.com/neutrinojs/webpack-chain see https://github.com/vuejs/vue-cli/blob/dev/docs/webpack.md
-	chainWebpack: config => {
-		/**
-		 * 删除懒加载模块的prefetch，降低带宽压力
-		 * https://cli.vuejs.org/zh/guide/html-and-static-assets.html#prefetch
-		 * 而且预渲染时生成的prefetch标签是modern版本的，低版本浏览器是不需要的
-		 */
-		//config.plugins.delete('prefetch');
-		//if(process.env.NODE_ENV === 'production') { // 为生产环境修改配置...process.env.NODE_ENV !== 'development'
-		//} else {// 为开发环境修改配置...
-		//}
-	},
-	//调整 webpack 配置 https://cli.vuejs.org/zh/guide/webpack.html#%E7%AE%80%E5%8D%95%E7%9A%84%E9%85%8D%E7%BD%AE%E6%96%B9%E5%BC%8F
-	configureWebpack: config => {
-		//生产and测试环境
-		let pluginsPro = [
-			new CompressionPlugin({
-				//文件开启Gzip，也可以通过服务端(如：nginx)(https://github.com/webpack-contrib/compression-webpack-plugin)
-				filename: "[path].gz[query]",
-				algorithm: "gzip",
-				test: new RegExp("\\.(" + ["js", "css"].join("|") + ")$"),
-				threshold: 8192,
-				minRatio: 0.8
-			}),
-			//	Webpack包文件分析器(https://github.com/webpack-contrib/webpack-bundle-analyzer)
-			new BundleAnalyzerPlugin()
-		];
-		//开发环境
-		let pluginsDev = [
-			//移动端模拟开发者工具(https://github.com/diamont1001/vconsole-webpack-plugin  https://github.com/Tencent/vConsole)
-			new vConsolePlugin({
-				filter: [], // 需要过滤的入口文件
-				enable: true // 发布代码前记得改回 false
+
+	// Babel 显式转译列表
+	//在vuecli3脚手架创建的项目中，awesome官方要求此配置
+	//https://github.com/Justineo/vue-awesome
+	transpileDependencies: [/\bvue-awesome\b/],
+
+	// 如果你不需要生产环境的 source map，可以将其设置为 false 以加速生产环境构建
+	productionSourceMap: true,
+
+	// 设置生成的 HTML 中 <link rel="stylesheet"> 和 <script> 标签的 crossorigin 属性（注：仅影响构建时注入的标签）
+	crossorigin: '',
+
+	// 在生成的 HTML 中的 <link rel="stylesheet"> 和 <script> 标签上启用 Subresource Integrity (SRI)
+	integrity: false,
+
+	// 如果这个值是一个对象，则会通过 webpack-merge 合并到最终的配置中
+	// 如果你需要基于环境有条件地配置行为，或者想要直接修改配置，那就换成一个函数 (该函数会在环境变量被设置之后懒执行)。该方法的第一个参数会收到已经解析好的配置。在函数内，你可以直接修改配置，或者返回一个将会被合并的对象
+	configureWebpack: {
+		plugins: [
+			new webpack.ProvidePlugin({
+				$: 'jquery',
+				JQuery: 'jquery',
+				'window.jQuery': 'jquery'
 			})
-		];
-		if (process.env.NODE_ENV === "production") {
-			// 为生产环境修改配置...process.env.NODE_ENV !== 'development'
-			config.plugins = [...config.plugins, ...pluginsPro];
-		} else {
-			// 为开发环境修改配置...
-			config.plugins = [...config.plugins, ...pluginsDev];
-		}
+		]
 	},
+
+	// 对内部的 webpack 配置（比如修改、增加Loader选项）(链式操作)
+	chainWebpack: () => {},
+
+	// css的处理
 	css: {
-		// 启用 CSS modules
-		modules: false,
-		// 是否使用css分离插件
-		extract: true,
-		// 开启 CSS source maps，一般不建议开启
+		// 当为true时，css文件名可省略 module 默认为 false
+		modules: true,
+		// 是否将组件中的 CSS 提取至一个独立的 CSS 文件中,当作为一个库构建时，你也可以将其设置为 false 免得用户自己导入 CSS
+		// 默认生产环境下是 true，开发环境下是 false
+		extract: false,
+		// 是否为 CSS 开启 source map。设置为 true 之后可能会影响构建的性能
 		sourceMap: false,
-		// css预设器配置项
+		//向 CSS 相关的 loader 传递选项(支持 css-loader postcss-loader sass-loader less-loader stylus-loader)
 		loaderOptions: {
-			sass: {
-				//设置css中引用文件的路径，引入通用使用的scss文件（如包含的@mixin）
-				data: `
-				$baseUrl: "/";
-				@import '@/assets/scss/_common.scss';
-				`
-				//data: `
-				//$baseUrl: "/";
-				//`
-			}
+			css: {},
+			less: {}
 		}
 	},
-	// webpack-dev-server 相关配置 https://webpack.js.org/configuration/dev-server/
+
+	// 所有 webpack-dev-server 的选项都支持
 	devServer: {
-		// host: 'localhost',
-		host: "0.0.0.0",
-		port: 8000, // 端口号
-		https: false, // https:{type:Boolean}
-		open: true, //配置自动启动浏览器  http://172.16.1.12:7071/rest/mcdPhoneBar/
-		hotOnly: true, // 热更新
-		// proxy: 'http://localhost:8000'   // 配置跨域处理,只有一个代理
+		// 端口号
+		port: 8080,
+		host: 'localhost',
+		// https:{type:Boolean}
+		https: false,
+		//配置自动启动浏览器
+		open: true,
+		// proxy: 'http://localhost:4000'
+		// 配置跨域处理,只有一个代理
 		proxy: {
-			//配置自动启动浏览器
-			"/rest/*": {
-				target: "http://172.16.1.12:7071",
-				changeOrigin: true,
-				// ws: true,//websocket支持
-				secure: false
+			'/api': {
+				target: '<url>',
+				ws: true,
+				changeOrigin: true
 			},
-			"/pbsevice/*": {
-				target: "http://172.16.1.12:2018",
-				changeOrigin: true,
-				//ws: true,//websocket支持
-				secure: false
+			'/foo': {
+				target: '<other_url>'
 			}
 		}
 	},
 
-	// 第三方插件配置 https://www.npmjs.com/package/vue-cli-plugin-style-resources-loader
-	pluginOptions: {
-		"style-resources-loader": {
-			//https://github.com/yenshih/style-resources-loader
-			preProcessor: "scss", //声明类型
-			patterns: [
-				//path.resolve(__dirname, './src/assets/scss/_common.scss'),
-			]
-			//injector: 'append'
-		}
-	}
-};
+	// 是否为 Babel 或 TypeScript 使用 thread-loader
+	parallel: require('os').cpus().length > 1,
+
+	// 向 PWA 插件传递选项
+	pwa: {},
+
+	// 可以用来传递任何第三方插件选项
+	pluginOptions: {}
+}
