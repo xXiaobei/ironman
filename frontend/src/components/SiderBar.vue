@@ -5,90 +5,58 @@
 		</div>
 		<div class="sidebar-wrapper">
 			<ul class="nav">
-				<router-link v-for="menu in menus" :key="menu.name" :to="'{{ menu.path }}'" class="nav-item" tag="li">
+				<router-link
+					v-for="(menu, index) in menus"
+					:key="index"
+					:to="menu.path"
+					class="nav-item"
+					:class="showDefaultClass(index)"
+					tag="li"
+				>
 					<a class="nav-link">
-						<i class="fas fa-tasks"></i>
+						<i class="fas" :class="menu.icons"></i>
 						<p>{{ menu.name }}</p>
 					</a>
 				</router-link>
-				<!-- <router-link v-for="menu in menus" :key="menu"> -->
-				<!-- <router-link :to="'/test'" active-class="active" class="nav-item active" tag="li">
-					<a class="nav-link" href="./dashboard.html">
-						<font-awesome-icon :icon="['fas', 'tasks']" size="2x" />
-						<p>test</p>
-					</a>
-				</router-link>　-->
-				<!-- <li class="nav-item active  ">
-					<a class="nav-link" href="./dashboard.html">
-						<font-awesome-icon :icon="['fas', 'tasks']" size="2x" />
-						<p>Dashboard</p>
-					</a>
-				</li> -->
-				<!--<li class="nav-item ">
-					<a class="nav-link" href="./user.html">
-						<i class="material-icons">person</i>
-						<p>User Profile</p>
-					</a>
-				</li>
-				<li class="nav-item ">
-					<a class="nav-link" href="./tables.html">
-						<i class="material-icons">content_paste</i>
-						<p>Table List</p>
-					</a>
-				</li>
-				<li class="nav-item ">
-					<a class="nav-link" href="./typography.html">
-						<i class="material-icons">library_books</i>
-						<p>Typography</p>
-					</a>
-				</li>
-				<li class="nav-item ">
-					<a class="nav-link" href="./icons.html">
-						<i class="material-icons">bubble_chart</i>
-						<p>Icons</p>
-					</a>
-				</li>
-				<li class="nav-item ">
-					<a class="nav-link" href="./map.html">
-						<i class="material-icons">location_ons</i>
-						<p>Maps</p>
-					</a>
-				</li>
-				<li class="nav-item ">
-					<a class="nav-link" href="./notifications.html">
-						<i class="material-icons">notifications</i>
-						<p>Notifications</p>
-					</a>
-				</li>
-				<li class="nav-item ">
-					<a class="nav-link" href="./rtl.html">
-						<i class="material-icons">language</i>
-						<p>RTL Support</p>
-					</a>
-				</li>
-				<li class="nav-item active-pro ">
-					<a class="nav-link" href="./upgrade.html">
-						<i class="material-icons">unarchive</i>
-						<p>Upgrade to PRO</p>
-					</a>
-				</li> -->
 			</ul>
 		</div>
 	</div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 
 export default {
 	data() {
-		return {}
+		return {
+			//菜单是否默认激活
+			showDefalt: false
+		}
+	},
+	methods: {
+		//映射mapMutations到局部的methods中
+		//此处映射可以理解为 映射 this.addTab(payload) 到 this.$store.commit('addTab',payload)
+		...mapMutations(['addTab']),
+		showDefaultClass: function(index) {
+			//因为要使用this关键字，故采用常规函数写法
+			if (this.showDefalt && index === 0) return true
+			else return false
+		}
 	},
 	computed: {
 		...mapState(['menus'])
 	},
 	mounted() {
+		this.showDefalt = true
+		const tabItemClose = false
+		this.addTab({ ...this.menus[0], tabItemClose })
 		//console.log(this.menus)
+	},
+	watch: {
+		//监控路由状态变化
+		$route() {
+			this.showDefalt = false
+		}
 	}
 }
 </script>

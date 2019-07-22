@@ -1,5 +1,8 @@
 import menus from '../data/siderBar'
 
 export default {
-	menus: menus
+	//菜单
+	menus: menus,
+	//全局tab
+	globalTabs: []
 }

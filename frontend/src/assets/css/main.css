@@ -5,7 +5,7 @@
 	line-height: 30px;
 	width: 30px;
 	text-align: center;
-	color: #fff;
+	color: #a9afbb;
 	margin-top: 3px;
 }
 .sidebar .logo {
@@ -24,6 +24,9 @@
 	overflow: hidden;
 	text-align: left;
 	display: block;
+}
+.sidebar[data-color='green'] li.active > a > svg {
+	color: #fff;
 }
 .main-panel > .content {
 	margin-top: 0px;

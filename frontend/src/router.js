@@ -8,12 +8,13 @@ Vue.use(Router)
 export default new Router({
 	mode: 'history',
 	base: process.env.BASE_URL,
+	//路由被激活时的样式
+	linkActiveClass: 'active',
+	linkExactActiveClass: 'active',
 	routes: [
 		{
 			path: '/',
 			component: Home,
-			//路由被激活时的样式
-			linkExactActiveClass: 'active',
 			children: [
 				{
 					//如果/下没有匹配到其他子路由时,/的<router-view>是什么都不会显示的
