@@ -9,7 +9,7 @@
 ### 前端框架
 
 -   Jquery
--   Jquery confirm
+-   Sweet alert
 -   Vuejs
 -   Bootstrap4
 -   Fontawsome
