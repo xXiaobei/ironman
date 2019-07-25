@@ -1,27 +1,48 @@
 <template>
 	<div class="nav-tabs-navigation">
 		<div class="nav-tabs-wrapper">
-			<span class="nav-tabs-title">Tasks:</span>
 			<ul class="nav nav-tabs" data-tabs="tabs">
 				<li class="nav-item">
-					<a class="nav-link active" href="#profile" data-toggle="tab">
-						<i class="material-icons">bug_report</i> Bugs
+					<router-link
+						:to="frozenMenu.path"
+						class="nav-link"
+						:class="currentMenu.path == frozenMenu.path ? 'active' : ''"
+						data-toggle="tab"
+						v-if="frozenMenu.path"
+					>
+						<i class="fas" :class="frozenMenu.icons"></i>{{ frozenMenu.name }}
 						<div class="ripple-container"></div>
-					</a>
+					</router-link>
 				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="#messages" data-toggle="tab">
-						<i class="material-icons">code</i> Website
+				<li class="nav-item" v-for="(menu, index) of globalTabs" :key="index">
+					<router-link
+						:to="menu.path"
+						class="nav-link"
+						:class="currentMenu.path == menu.path ? 'active' : ''"
+						data-toggle="tab"
+						v-if="menu"
+					>
+						<i class="fas" :class="menu.icons"></i>{{ menu.name }}
+						<span aria-hidden="true" class="top_header_c">&times;</span>
 						<div class="ripple-container"></div>
-					</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="#settings" data-toggle="tab">
-						<i class="material-icons">cloud</i> Server
-						<div class="ripple-container"></div>
-					</a>
+					</router-link>
 				</li>
 			</ul>
 		</div>
 	</div>
 </template>
+
+<script>
+import { mapState } from 'vuex'
+
+export default {
+	computed: {
+		...mapState(['frozenMenu', 'globalTabs', 'currentMenu'])
+	},
+	mounted() {
+		//console.log(this.frozenMenu.name)
+		//console.log(this.currentMenu)
+	}
+}
+</script>
+

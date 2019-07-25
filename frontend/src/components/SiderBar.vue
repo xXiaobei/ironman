@@ -10,7 +10,7 @@
 					:key="index"
 					:to="menu.path"
 					class="nav-item"
-					:class="showDefaultClass(index)"
+					:class="currentMenu.path === menu.path ? 'active' : ''"
 					tag="li"
 				>
 					<a class="nav-link">
@@ -28,34 +28,26 @@ import { mapState, mapMutations } from 'vuex'
 
 export default {
 	data() {
-		return {
-			//菜单是否默认激活
-			showDefalt: false
-		}
+		return {}
 	},
 	methods: {
 		//映射mapMutations到局部的methods中
 		//此处映射可以理解为 映射 this.addTab(payload) 到 this.$store.commit('addTab',payload)
-		...mapMutations(['addTab']),
-		showDefaultClass: function(index) {
-			//因为要使用this关键字，故采用常规函数写法
-			if (this.showDefalt && index === 0) return true
-			else return false
-		}
+		...mapMutations(['setCurrentMenu', 'setFrozenMenu'])
 	},
 	computed: {
-		...mapState(['menus'])
+		...mapState(['menus', 'currentMenu'])
 	},
 	mounted() {
-		this.showDefalt = true
-		const tabItemClose = false
-		this.addTab({ ...this.menus[0], tabItemClose })
-		//console.log(this.menus)
+		//菜单挂载后，设置第一个菜单为顶部导航栏的固定菜单
+		this.setFrozenMenu(this.menus[0])
+		//设置当前选中菜单
+		this.setCurrentMenu(this.$route.path)
 	},
 	watch: {
 		//监控路由状态变化
 		$route() {
-			this.showDefalt = false
+			this.setCurrentMenu(this.$route.path)
 		}
 	}
 }

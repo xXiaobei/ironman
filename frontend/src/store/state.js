@@ -4,5 +4,7 @@ export default {
 	//菜单
 	menus: menus,
 	//全局tab
-	globalTabs: []
+	globalTabs: [],
+	currentMenu: Object,
+	frozenMenu: Object
 }

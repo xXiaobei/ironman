@@ -11,9 +11,9 @@
 							<div class="card-header card-header-tabs card-header-primary">
 								<HeaderBar />
 							</div>
-						</div>
-						<div class="card-body">
-							<router-view />
+							<div class="card-body">
+								<router-view />
+							</div>
 						</div>
 						<FooterBar />
 					</div>

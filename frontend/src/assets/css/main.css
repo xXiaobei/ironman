@@ -33,4 +33,14 @@
 }
 .card {
 	margin-top: 0px;
+	height: 85vh;
+}
+.nav-tabs .nav-item .nav-link.active > .top_header_c {
+	display: inline;
+}
+.top_header_c {
+	display: none;
+}
+.top_header_c:hover {
+	color: #dc3545;
 }
