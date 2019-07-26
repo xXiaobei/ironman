@@ -1,32 +1,121 @@
-//Vue.config.js是一个可选的配置文件，如果项目的根目录存在这个文件，那么它就会被 @vue/cli-service 自动加载。
-//你也可以使用package.json中的vue字段，但要注意严格遵守JSON的格式来写。这里使用配置vue.config.js的方式进行处理。
-const webpack = require('webpack')
+//vue.config.js是一个与package.json同级的配置文件
+//会被@vue/cli-service 自动加载
 
 module.exports = {
-	// 部署应用时的基本 URL
-	/*baseUrl:
-		process.env.NODE_ENV === 'production'
-			? '10.0.0.0:8080'
-            : '10.0.0.1:8080',*/
-	baseUrl: '',
+	//从vue cli 3.3 起，baseUrl弃用，publicPath为唯一标准
+	//publicPath为部署应用包时的基本Url，默认值为'/'
+	//publicPath为空''或者是相对路径'./'时，所有资源都会被链接为相对路径，
+	//基本Url为相对路径时，打包出来的文件可被部署到任意路径
+	//publicPath为相对路径的例外情况：
+	//当使用基于html5 history.pushState 的路由时；
+	//当使用pages选项，构建多页面应用时；
+	publicPath: process.env.NODE_ENV === 'production' ? '/' : '/',
 
-	// build时构建文件的目录 构建时传入 --no-clean 可关闭该行为
+	//打包文件输出目录，默认值为dist，可以传入相对路径
+	//build时候指定目录会被删除，在运行build命令时，传入--no-clean 可关闭删除动作
 	outputDir: '../dist',
 
-	// build时放置生成的静态资源 (js、css、img、fonts) 的 (相对于 outputDir 的) 目录
+	//放置打包后静态资源(js、css、img、fonts)的(相对于outputDir)目录
+	//当生成的资源覆写filename或chunkFilename时，assetsDir会被忽略
 	assetsDir: '',
 
-	// 指定生成的 index.html 的输出路径 (相对于 outputDir)。也可以是一个绝对路径。
+	//指定生成index.html的路径（相对于outputDir），支持绝对路径
 	indexPath: 'index.html',
 
-	// 默认在生成的静态资源文件名中包含hash以控制缓存
+	//静态资源文件名是否加入hash字符串（控制缓存）
+	//文件名hash的前提时，index.html时通过vuecli生成的
 	filenameHashing: true,
 
-	// 构建多页面应用，页面的配置
-	/* 多页面配置关闭
-	pages: {
+	//是否通过eslint-loader在每次保存lint代码，默认为true
+	//如果想让该功能生效，必须安装插件@vue/cli-plugin-eslint
+	//当配置为’error‘时，编译产生的警告将会导致编译失败
+	//更详细的说明见：https://cli.vuejs.org/zh/config/#lintonsave
+	//以下配置在生产构架时，禁用eslint-loader
+	lintOnSave: process.env.NODE_ENV !== 'production',
+
+	//是否使用包含运行时编译器的 Vue 构建版本
+	runtimeCompiler: false,
+
+	//babel显示转译依赖的列表
+	transpileDependencies: [],
+
+	//生产环境的sourceMap，设置false可以加速生产环境构建
+	productionSourceMap: true,
+
+	//设置生成的 HTML 中 <link rel="stylesheet"> 和 <script> 标签的 crossorigin 属性
+	//模板（public/index.html）中的link、script标签不受影响
+	crossorigin: '',
+
+	//在生成的 HTML 中的 <link rel="stylesheet"> 和 <script> 标签上启用 Subresource Integrity (SRI)。
+	//模板（public/index.html）中的link、script标签不受影响
+	integrity: false,
+
+	//如果这个值是一个对象，则会通过 webpack-merge 合并到最终的配置中。
+	//如果这个值是一个函数，则会接收被解析的配置作为参数。
+	//该函数及可以修改配置并不返回任何东西，也可以返回一个被克隆或合并过的配置版本。
+	configureWebpack: {},
+
+	//是一个函数，会接收一个基于 webpack-chain 的 ChainableConfig 实例。
+	//允许对内部的 webpack 配置进行更细粒度的修改。
+	//详见：https://cli.vuejs.org/zh/guide/webpack.html#%E9%93%BE%E5%BC%8F%E6%93%8D%E4%BD%9C-%E9%AB%98%E7%BA%A7
+	chainWebpack: function() {},
+
+	//是否为 Babel 或 TypeScript 使用 thread-loader。
+	//该选项在系统的 CPU 有多于一个内核时自动启用，仅作用于生产构建！
+	parallel: require('os').cpus().length > 1,
+
+	//向 PWA 插件传递选项
+	pwa: {},
+
+	//传递第三方插件选项
+	pluginOptions: {
+		// 插件可以作为 `options.pluginOptions.foo` 访问这些选项。
+		foo: {}
+	},
+
+	//CSS相关设置
+	css: {
+		//默认情况下，只有 *.module.[ext] 结尾的文件才会被视作 CSS Modules 模块。
+		//设置为true，去掉文件名中的module，并将所有的*.css类的文件视为css modules模块
+		modules: false,
+		//是否将组件中的 CSS 提取至一个独立的 CSS 文件中 (而不是动态注入到 JavaScript 中的 inline 代码)。
+		//Default: 生产环境下是 true，开发环境下是 false
+		extract: false,
+		//是否为css构建sourceMap，关闭（影响性能）
+		sourceMap: false,
+		//向 CSS 相关的 loader 传递选项
+		//详见：https://cli.vuejs.org/zh/guide/css.html#%E5%90%91%E9%A2%84%E5%A4%84%E7%90%86%E5%99%A8-loader-%E4%BC%A0%E9%80%92%E9%80%89%E9%A1%B9
+		loaderOptions: {
+			// 这里的选项会传递给 css-loader
+			css: {},
+			// 这里的选项会传递给 postcss-loader
+			postcss: {}
+		}
+	},
+
+	//所有 webpack-dev-server 的选项都支持
+	devServer: {
+		//指向开发环境 API 服务器的url
+		//如果前端应用好后端API服务器没有在同一主机，proxy可以设置api的请求代理
+		//设置代理后，服务器会将未知请求（没有匹配到静态文件）代理到proxy绑定的url
+		//proxy 详细设置见：https://github.com/chimurai/http-proxy-middleware#proxycontext-config
+		proxy: {
+			'/api': {
+				target: '<url>',
+				ws: true, // proxy websockets
+				changeOrigin: true // needed for virtual hosted sites
+			},
+			'/foo': {
+				target: '<other_url>'
+			}
+		}
+	}
+
+	//在mulit-page下构建应用，默认为undefined
+	//在mulit-page模式下，每个”page“都会对应一个JavaScript入口文件。
+	/*pages: {
 		index: {
-			// page 的入口
+			// page 的入口(必填项，其它可选)
 			entry: 'src/index/main.js',
 			// 模板来源
 			template: 'public/index.html',
@@ -44,89 +133,5 @@ module.exports = {
 		// 并且如果找不到的话，就回退到 `public/index.html`。
 		// 输出文件名会被推导为 `subpage.html`。
 		subpage: 'src/subpage/main.js'
-    },
-    */
-
-	// 是否在开发环境下通过 eslint-loader 在每次保存时 lint 代码 (在生产构建时禁用 eslint-loader)
-	lintOnSave: process.env.NODE_ENV !== 'production',
-
-	// 是否使用包含运行时编译器的 Vue 构建版本
-	runtimeCompiler: false,
-
-	// Babel 显式转译列表
-	//在vuecli3脚手架创建的项目中，awesome官方要求此配置
-	//https://github.com/Justineo/vue-awesome
-	transpileDependencies: [/\bvue-awesome\b/],
-
-	// 如果你不需要生产环境的 source map，可以将其设置为 false 以加速生产环境构建
-	productionSourceMap: true,
-
-	// 设置生成的 HTML 中 <link rel="stylesheet"> 和 <script> 标签的 crossorigin 属性（注：仅影响构建时注入的标签）
-	crossorigin: '',
-
-	// 在生成的 HTML 中的 <link rel="stylesheet"> 和 <script> 标签上启用 Subresource Integrity (SRI)
-	integrity: false,
-
-	// 如果这个值是一个对象，则会通过 webpack-merge 合并到最终的配置中
-	// 如果你需要基于环境有条件地配置行为，或者想要直接修改配置，那就换成一个函数 (该函数会在环境变量被设置之后懒执行)。该方法的第一个参数会收到已经解析好的配置。在函数内，你可以直接修改配置，或者返回一个将会被合并的对象
-	configureWebpack: {
-		plugins: [
-			new webpack.ProvidePlugin({
-				$: 'jquery',
-				JQuery: 'jquery',
-				'window.jQuery': 'jquery'
-			})
-		]
-	},
-
-	// 对内部的 webpack 配置（比如修改、增加Loader选项）(链式操作)
-	chainWebpack: () => {},
-
-	// css的处理
-	css: {
-		// 当为true时，css文件名可省略 module 默认为 false
-		modules: true,
-		// 是否将组件中的 CSS 提取至一个独立的 CSS 文件中,当作为一个库构建时，你也可以将其设置为 false 免得用户自己导入 CSS
-		// 默认生产环境下是 true，开发环境下是 false
-		extract: false,
-		// 是否为 CSS 开启 source map。设置为 true 之后可能会影响构建的性能
-		sourceMap: false,
-		//向 CSS 相关的 loader 传递选项(支持 css-loader postcss-loader sass-loader less-loader stylus-loader)
-		loaderOptions: {
-			css: {},
-			less: {}
-		}
-	},
-
-	// 所有 webpack-dev-server 的选项都支持
-	devServer: {
-		// 端口号
-		port: 8080,
-		host: 'localhost',
-		// https:{type:Boolean}
-		https: false,
-		//配置自动启动浏览器
-		open: true,
-		// proxy: 'http://localhost:4000'
-		// 配置跨域处理,只有一个代理
-		proxy: {
-			'/api': {
-				target: '<url>',
-				ws: true,
-				changeOrigin: true
-			},
-			'/foo': {
-				target: '<other_url>'
-			}
-		}
-	},
-
-	// 是否为 Babel 或 TypeScript 使用 thread-loader
-	parallel: require('os').cpus().length > 1,
-
-	// 向 PWA 插件传递选项
-	pwa: {},
-
-	// 可以用来传递任何第三方插件选项
-	pluginOptions: {}
+	},*/
 }
