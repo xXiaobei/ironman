@@ -23,6 +23,13 @@
 	</div>
 </template>
 
+<style lang="scss">
+// 引用assets样式
+@import './assets/css/material-dashboard.min';
+@import './assets/css/main.css';
+</style>
+
+
 <script>
 // @ is an alias to /src
 //import HelloWorld from '@/components/HelloWorld.vue'
