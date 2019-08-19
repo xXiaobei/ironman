@@ -25,14 +25,13 @@
 
 <style lang="scss">
 // 引用assets样式
-@import './assets/css/material-dashboard.min';
 @import './assets/css/main.css';
 </style>
 
 
 <script>
 // @ is an alias to /src
-//import HelloWorld from '@/components/HelloWorld.vue'
+//组件的引用
 import SiderBar from '@/components/SiderBar.vue'
 import HeaderBar from '@/components/HeaderBar.vue'
 import FooterBar from '@/components/FooterBar.vue'

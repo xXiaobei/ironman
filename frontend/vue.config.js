@@ -1,5 +1,6 @@
 //vue.config.js是一个与package.json同级的配置文件
 //会被@vue/cli-service 自动加载
+const path = require('path')
 
 module.exports = {
 	//从vue cli 3.3 起，baseUrl弃用，publicPath为唯一标准
@@ -9,7 +10,8 @@ module.exports = {
 	//publicPath为相对路径的例外情况：
 	//当使用基于html5 history.pushState 的路由时；
 	//当使用pages选项，构建多页面应用时；
-	publicPath: process.env.NODE_ENV === 'production' ? '/' : '/',
+	//publicPath: process.env.NODE_ENV === 'production' ? '/' : '/',
+	publicPath: './',
 
 	//打包文件输出目录，默认值为dist，可以传入相对路径
 	//build时候指定目录会被删除，在运行build命令时，传入--no-clean 可关闭删除动作
