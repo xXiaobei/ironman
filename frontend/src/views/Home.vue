@@ -23,12 +23,6 @@
 	</div>
 </template>
 
-<style lang="scss">
-// 引用assets样式
-@import './assets/css/main.css';
-</style>
-
-
 <script>
 // @ is an alias to /src
 //组件的引用
