@@ -1,5 +1,7 @@
-//注意：执行npm run build 之前，需在命令行设置临时环境变量（set NODE_ENV=production）
+//注意：执行npm run build 之前，需在命令行设置临时环境变量（ export NODE_ENV=production）
 const path = require('path')
+//path.resolve和path.join都能讲路径串联起来
+//区别在于resolve返回绝对路径，join按照当前平台路径规则把路径串联起来，并规范化
 const resolve = dir => path.resolve(__dirname, dir)
 //运行进行压缩的文件后缀
 const gzipExtensions = ['js', 'css']
