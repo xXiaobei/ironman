@@ -16,7 +16,7 @@ const env_Production = ['production', 'prod'].includes(process.env.NODE_ENV)
 
 module.exports = {
 	publicPath: './', //部署应用包时的基本 RUL，默认为"/"
-	outputDir: 'dist', //打包文件输出目录
+	outputDir: '../dist/', //打包文件输出目录
 	assetsDir: '', //相对于outputDIr的静态资源（js、css、img、fonts）目录
 	lintOnSave: false,
 	runtimeCompiler: true, // 是否使用包含运行时编辑器的 Vue 构建版本
